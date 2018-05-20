@@ -158,6 +158,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\TimesheetsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,6 +182,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ClockMeModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Timesheet.cs">
+      <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
@@ -251,6 +257,13 @@
     <Content Include="Views\Activities\Details.cshtml" />
     <Content Include="Views\Activities\Edit.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Timesheets\Create.cshtml" />
+    <Content Include="Views\Timesheets\Delete.cshtml" />
+    <Content Include="Views\Timesheets\Details.cshtml" />
+    <Content Include="Views\Timesheets\Edit.cshtml" />
+    <Content Include="Views\Timesheets\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

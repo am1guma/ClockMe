@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ClockMe.Models.Activity>
+﻿@model IEnumerable<ClockMe.Models.Timesheet>
 
 @{
-    ViewBag.Title = "Activities";
+    ViewBag.Title = "Timesheets";
 }
 
-<h2>Activities</h2>
+<h2>Timesheets</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,7 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Time)
+            @Html.DisplayNameFor(model => model.Hours)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Type)
@@ -26,7 +26,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Time)
+            @Html.DisplayFor(modelItem => item.Hours)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Type)

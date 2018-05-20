@@ -10,112 +10,112 @@ using ClockMe.Models;
 
 namespace ClockMe.Controllers
 {
-    public class UsersController : Controller
+    public class TimesheetsController : Controller
     {
         private ClockMeContext db = new ClockMeContext();
 
-        // GET: Users
-        public ActionResult Index(string firstName, string lastName, string email, string role)
+        // GET: Timesheets
+        public ActionResult Index()
         {
-            var users = from u in db.Users select u;
-            if (firstName != null && lastName != null && email != null && role != null)
-            {
-                users = users.Where(s => s.FirstName.Contains(firstName) && s.LastName.Contains(lastName) && s.Email.Contains(email) && s.Role.Contains(role));
-            }
-            return View(users.ToList());
+            var timesheets = db.Timesheets.Include(t => t.User);
+            return View(timesheets.ToList());
         }
 
-        // GET: Users/Details/5
+        // GET: Timesheets/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Timesheet timesheet = db.Timesheets.Find(id);
+            if (timesheet == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(timesheet);
         }
 
-        // GET: Users/Create
+        // GET: Timesheets/Create
         public ActionResult Create()
         {
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Timesheets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        public ActionResult Create([Bind(Include = "Id,UserId,Hours,Type")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
+                db.Timesheets.Add(timesheet);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
+            return View(timesheet);
         }
 
-        // GET: Users/Edit/5
+        // GET: Timesheets/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Timesheet timesheet = db.Timesheets.Find(id);
+            if (timesheet == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
+            return View(timesheet);
         }
 
-        // POST: Users/Edit/5
+        // POST: Timesheets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        public ActionResult Edit([Bind(Include = "Id,UserId,Hours,Type")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(timesheet).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
+            return View(timesheet);
         }
 
-        // GET: Users/Delete/5
+        // GET: Timesheets/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Timesheet timesheet = db.Timesheets.Find(id);
+            if (timesheet == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(timesheet);
         }
 
-        // POST: Users/Delete/5
+        // POST: Timesheets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
+            Timesheet timesheet = db.Timesheets.Find(id);
+            db.Timesheets.Remove(timesheet);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
