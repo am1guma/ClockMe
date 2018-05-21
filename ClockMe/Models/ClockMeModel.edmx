@@ -20,6 +20,7 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="Hours" Type="int" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
@@ -131,6 +132,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Hours" Type="Int32" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="ClockMeModel.FK_Timesheets_Users" FromRole="Timesheet" ToRole="User" />
@@ -181,6 +183,7 @@
               <MappingFragment StoreEntitySet="Timesheets">
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Hours" ColumnName="Hours" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

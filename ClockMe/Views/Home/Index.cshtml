@@ -1,5 +1,5 @@
 ﻿<div class="clock">
-    <div id="Date"></div>
+    <div id="HomeDate"></div>
     <ul>
         <li id="hours"></li>
         <li id="point">:</li>
@@ -21,7 +21,7 @@
             // Extract the current date from Date object
             newDate.setDate(newDate.getDate());
             // Output the day, date, month and year
-            $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
+            $('#HomeDate').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
 
             setInterval(function () {
                 // Create a newDate() object and extract the seconds of the current time on the visitor's

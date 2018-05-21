@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<ClockMe.Models.Timesheet>
 
 @{
-    ViewBag.Title = "Timesheets";
+    ViewBag.Title = "Index";
 }
 
-<h2>Timesheets</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Hours)
         </th>
@@ -25,6 +28,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Hours)
         </td>

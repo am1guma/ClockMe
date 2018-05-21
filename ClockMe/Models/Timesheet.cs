@@ -16,6 +16,7 @@ namespace ClockMe.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public System.DateTime Date { get; set; }
         public int Hours { get; set; }
         public string Type { get; set; }
     
