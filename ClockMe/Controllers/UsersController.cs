@@ -15,12 +15,12 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Users
-        public ActionResult Index(string firstName, string lastName, string email, string role)
+        public ActionResult Index(string firstName, string lastName, string email, string role, string workingHours)
         {
             var users = from u in db.Users select u;
-            if (firstName != null && lastName != null && email != null && role != null)
+            if (firstName != null && lastName != null && email != null && role != null && workingHours != null)
             {
-                users = users.Where(s => s.FirstName.Contains(firstName) && s.LastName.Contains(lastName) && s.Email.Contains(email) && s.Role.Contains(role));
+                users = users.Where(s => s.FirstName.Contains(firstName) && s.LastName.Contains(lastName) && s.Email.Contains(email) && s.Role.Contains(role) && s.WorkingHours.ToString().Contains(workingHours));
             }
             return View(users.ToList());
         }
