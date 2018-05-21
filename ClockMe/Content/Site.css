@@ -26,3 +26,45 @@ textarea {
 #datetimepicker {
     width: 280px;
 }
+
+.clock {
+    text-align: center;
+    margin-top: 140px;
+    margin-bottom: 140px;
+}
+
+#Date {
+    font-size: 40px;
+    text-shadow: 0 0 5px #9d9d9d;
+}
+
+.clock ul {
+    padding: 0px;
+}
+
+    .clock ul li {
+        display: inline;
+        font-size: 140px;
+        text-shadow: 0 0 5px #9d9d9d;
+    }
+
+#point {
+    animation: mymove 1s ease infinite;
+}
+
+@keyframes mymove {
+    0% {
+        opacity: 1.0;
+        text-shadow: 0 0 20px #9d9d9d;
+    }
+
+    50% {
+        opacity: 0;
+        text-shadow: none;
+    }
+
+    100% {
+        opacity: 1.0;
+        text-shadow: 0 0 20px #9d9d9d;
+    }
+}
