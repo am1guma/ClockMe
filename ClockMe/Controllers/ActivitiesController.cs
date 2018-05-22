@@ -39,7 +39,7 @@ namespace ClockMe.Controllers
         // GET: Activities/Create
         public ActionResult Create()
         {
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Email");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace ClockMe.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", activity.UserId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Email", activity.UserId);
             return View(activity);
         }
 
@@ -73,7 +73,6 @@ namespace ClockMe.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", activity.UserId);
             return View(activity);
         }
 
@@ -90,7 +89,6 @@ namespace ClockMe.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", activity.UserId);
             return View(activity);
         }
 
