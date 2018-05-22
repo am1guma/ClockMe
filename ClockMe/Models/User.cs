@@ -19,6 +19,7 @@ namespace ClockMe.Models
         {
             this.Activities = new HashSet<Activity>();
             this.Timesheets = new HashSet<Timesheet>();
+            this.PlanningCalendars = new HashSet<PlanningCalendar>();
         }
     
         public int Id { get; set; }
@@ -33,5 +34,7 @@ namespace ClockMe.Models
         public virtual ICollection<Activity> Activities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Timesheet> Timesheets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanningCalendar> PlanningCalendars { get; set; }
     }
 }

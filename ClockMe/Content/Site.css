@@ -23,8 +23,14 @@ textarea {
     max-width: 280px;
 }
 
-#datetimepicker {
+#datepicker {
     width: 280px;
+}
+
+input[name="event-name"],
+input[name="event-location"],
+.input-group {
+    max-width: unset;
 }
 
 .clock {

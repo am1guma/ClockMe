@@ -10,6 +10,8 @@
         <AssociationConnector Association="ClockMeModel.FK_Activities_Users" ManuallyRouted="false" />
         <EntityTypeShape EntityType="ClockMeModel.Timesheet" Width="1.5" PointX="3" PointY="4.25" />
         <AssociationConnector Association="ClockMeModel.FK_Timesheets_Users" />
+        <EntityTypeShape EntityType="ClockMeModel.PlanningCalendar" Width="1.5" PointX="3" PointY="7.25" />
+        <AssociationConnector Association="ClockMeModel.FK_PlanningCalendar_PlanningCalendar" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

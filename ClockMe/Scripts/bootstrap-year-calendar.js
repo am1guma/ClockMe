@@ -311,8 +311,12 @@
 					{
 						var monthData = [];
 					
-						for(var i in _this.options.dataSource) {
-							if(!(_this.options.dataSource[i].startDate > lastDate) || (_this.options.dataSource[i].endDate < firstDate)) {
+                        for (var i in _this.options.dataSource) {
+                            var startDateWithoutHours = new Date(_this.options.dataSource[i].startDate);
+                            startDateWithoutHours.setHours(0, 0, 0, 0);
+                            var endDateWithoutHours = new Date(_this.options.dataSource[i].endDate);
+                            endDateWithoutHours.setHours(0, 0, 0, 0);
+                            if (!(startDateWithoutHours > lastDate) || (endDateWithoutHours < firstDate)) {
 								monthData.push(_this.options.dataSource[i]);
 							}
 						}
@@ -325,8 +329,12 @@
 								
 								if((_this.options.minDate == null || currentDate >= _this.options.minDate) && (_this.options.maxDate == null || currentDate <= _this.options.maxDate))
 								{
-									for(var i in monthData) {
-										if(monthData[i].startDate <= currentDate && monthData[i].endDate >= currentDate) {
+                                    for (var i in monthData) {
+                                        var startDateWithoutHours = new Date(monthData[i].startDate);
+                                        startDateWithoutHours.setHours(0, 0, 0, 0);
+                                        var endDateWithoutHours = new Date(monthData[i].endDate);
+                                        endDateWithoutHours.setHours(0, 0, 0, 0);
+                                        if (startDateWithoutHours <= currentDate && endDateWithoutHours >= currentDate) {
 											dayData.push(monthData[i]);
 										}
 									}
@@ -773,8 +781,12 @@
 			var events = [];
 			
 			if(this.options.dataSource && date) {
-				for(var i in this.options.dataSource) {
-					if(this.options.dataSource[i].startDate <= date && this.options.dataSource[i].endDate >= date) {
+                for (var i in this.options.dataSource) {
+                    var startDateWithoutHours = new Date(this.options.dataSource[i].startDate);
+                    startDateWithoutHours.setHours(0, 0, 0, 0);
+                    var endDateWithoutHours = new Date(this.options.dataSource[i].endDate);
+                    endDateWithoutHours.setHours(0, 0, 0, 0);
+                    if (startDateWithoutHours <= date && endDateWithoutHours >= date) {
 						events.push(this.options.dataSource[i]);
 					}
 				}

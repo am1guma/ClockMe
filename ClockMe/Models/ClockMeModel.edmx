@@ -14,6 +14,17 @@
           <Property Name="Time" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="PlanningCalendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Location" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Timesheets">
           <Key>
             <PropertyRef Name="Id" />
@@ -48,6 +59,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PlanningCalendar_PlanningCalendar">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PlanningCalendar" Type="Self.PlanningCalendar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlanningCalendar">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Timesheets_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Timesheets" Type="Self.Timesheets" Multiplicity="*" />
@@ -62,11 +85,16 @@
         </Association>
         <EntityContainer Name="ClockMeModelStoreContainer">
           <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlanningCalendar" EntityType="Self.PlanningCalendar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Timesheets" EntityType="Self.Timesheets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Activities_Users" Association="Self.FK_Activities_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Activities" EntitySet="Activities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlanningCalendar_PlanningCalendar" Association="Self.FK_PlanningCalendar_PlanningCalendar">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PlanningCalendar" EntitySet="PlanningCalendar" />
           </AssociationSet>
           <AssociationSet Name="FK_Timesheets_Users" Association="Self.FK_Timesheets_Users">
             <End Role="Users" EntitySet="Users" />
@@ -100,6 +128,7 @@
           <NavigationProperty Name="Activities" Relationship="Self.FK_Activities_Users" FromRole="Users" ToRole="Activities" />
           <Property Name="WorkingHours" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Timesheets" Relationship="ClockMeModel.FK_Timesheets_Users" FromRole="User" ToRole="Timesheet" />
+          <NavigationProperty Name="PlanningCalendars" Relationship="ClockMeModel.FK_PlanningCalendar_PlanningCalendar" FromRole="User" ToRole="PlanningCalendar" />
         </EntityType>
         <Association Name="FK_Activities_Users">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
@@ -125,6 +154,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Timesheet" EntitySet="Timesheets" />
           </AssociationSet>
+          <EntitySet Name="PlanningCalendars" EntityType="ClockMeModel.PlanningCalendar" />
+          <AssociationSet Name="FK_PlanningCalendar_PlanningCalendar" Association="ClockMeModel.FK_PlanningCalendar_PlanningCalendar">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PlanningCalendar" EntitySet="PlanningCalendars" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Timesheet">
           <Key>
@@ -145,6 +179,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Timesheet">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PlanningCalendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="User" Relationship="ClockMeModel.FK_PlanningCalendar_PlanningCalendar" FromRole="PlanningCalendar" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PlanningCalendar_PlanningCalendar">
+          <End Type="ClockMeModel.User" Role="User" Multiplicity="1" />
+          <End Type="ClockMeModel.PlanningCalendar" Role="PlanningCalendar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlanningCalendar">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -184,6 +242,18 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Hours" ColumnName="Hours" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanningCalendars">
+            <EntityTypeMapping TypeName="ClockMeModel.PlanningCalendar">
+              <MappingFragment StoreEntitySet="PlanningCalendar">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
