@@ -62,6 +62,7 @@ namespace ClockMe.Controllers
                 var regId = Convert.ToInt16(Session["RegisterId"]);
                 var register = db.Registers.First(reg => reg.Id == regId);
                 user.Id = register.Id;
+                user.Role = "user";
                 db.Users.Add(user);
                 db.Registers.Remove(register);
                 db.SaveChanges();
