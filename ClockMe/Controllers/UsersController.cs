@@ -43,7 +43,11 @@ namespace ClockMe.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
-            return View();
+            if (Session["RegisterId"] != null)
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Register");
         }
 
         // POST: Users/Create
@@ -55,9 +59,13 @@ namespace ClockMe.Controllers
         {
             if (ModelState.IsValid)
             {
+                var regId = Convert.ToInt16(Session["RegisterId"]);
+                var register = db.Registers.First(reg => reg.Id == regId);
+                user.Id = register.Id;
                 db.Users.Add(user);
+                db.Registers.Remove(register);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("RegisterDone","Register");
             }
 
             return View(user);

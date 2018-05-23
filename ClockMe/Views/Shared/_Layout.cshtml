@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@{
+    if (Session["userId"] == null)
+    {
+        if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create"))
+        {
+            Response.Redirect("~/Login/Index");
+        }
+    }
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,9 +36,12 @@
                     <li><a href="/PlanningCalendar"><span class="glyphicon glyphicon-calendar"></span> Planning calendar</a></li>
                     <li><a href="#"><span class="glyphicon glyphicon-cog"></span> User details</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" id="LoginMenu" hidden>
                     <li><a href="/Register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
                     <li><a href="/Login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="LogoutMenu" hidden>
+                    <li><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -47,5 +60,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-</body>
-</html>
+
+    <script type="text/javascript">
+        var userId = '@Session["userId"]';
+        if (userId) {
+            $("#LoginMenu").hide();
+            $("#LogoutMenu").show();
+        } else {
+            $("#LoginMenu").show();
+            $("#LogoutMenu").hide();
+        }
+    </script>
+</body >
+</html >

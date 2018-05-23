@@ -7,6 +7,7 @@
       <Diagram DiagramId="4abf711368fc42e0b9804f8d601b98e2" Name="Diagram1">
         <EntityTypeShape EntityType="ClockMeModel.Activity" Width="1.5" PointX="3" PointY="7.25" />
         <EntityTypeShape EntityType="ClockMeModel.PlanningCalendar" Width="1.5" PointX="3" PointY="1.25" />
+        <EntityTypeShape EntityType="ClockMeModel.Register" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="ClockMeModel.Timesheet" Width="1.5" PointX="3" PointY="4.375" />
         <EntityTypeShape EntityType="ClockMeModel.User" Width="1.5" PointX="0.75" PointY="3.75" />
         <AssociationConnector Association="ClockMeModel.FK_Activities_Users" />

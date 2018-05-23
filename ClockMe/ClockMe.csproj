@@ -157,6 +157,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Controllers\ArduinoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlanningCalendarController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -184,7 +185,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClockMeModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\PlanningCalendar.cs">
+      <DependentUpon>ClockMeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Register.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Timesheet.cs">
@@ -239,7 +244,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -269,9 +276,17 @@
     <Content Include="Views\Timesheets\Edit.cshtml" />
     <Content Include="Views\Timesheets\Index.cshtml" />
     <Content Include="Views\PlanningCalendar\Index.cshtml" />
+    <Content Include="Views\PlanningCalendar\Create.cshtml" />
+    <Content Include="Views\PlanningCalendar\Delete.cshtml" />
+    <Content Include="Views\PlanningCalendar\Details.cshtml" />
+    <Content Include="Views\PlanningCalendar\Edit.cshtml" />
+    <Content Include="Views\Register\RegisterDone.cshtml" />
+    <Content Include="Views\Login\ForgotPassword.cshtml" />
+    <Content Include="Views\Login\ForgotPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Arduino\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
