@@ -1,7 +1,7 @@
 ﻿@{
     if (Session["userId"] == null)
     {
-        if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create"))
+        if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create") && !Request.Path.Contains("/Arduino"))
         {
             Response.Redirect("~/Login/Index");
         }

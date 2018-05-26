@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ClockMe.Models;
+using ClockMe.App_Start;
 
 namespace ClockMe.Controllers
 {
@@ -126,6 +127,7 @@ namespace ClockMe.Controllers
             User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
+            Global.IdToBeDeleted = id.ToString();
             return RedirectToAction("Index");
         }
 
