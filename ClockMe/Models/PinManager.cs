@@ -12,14 +12,9 @@ namespace ClockMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Timesheet
+    public partial class PinManager
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
-        public System.DateTime Date { get; set; }
-        public int Hours { get; set; }
-        public string Type { get; set; }
-    
-        public virtual User User { get; set; }
+        public int Pin { get; set; }
     }
 }
