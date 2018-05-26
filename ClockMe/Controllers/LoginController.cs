@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -51,6 +52,40 @@ namespace ClockMe.Controllers
             return View();
         }
 
+        public ActionResult ResetPassword()
+        {
+            var pin = Convert.ToInt32(Request.QueryString["pin"]);
+            var fgInfo = db.PinManagers.FirstOrDefault(f => f.Pin.Equals(pin));
+            if (fgInfo != null)
+            {
+                ResetPassword resetInfo = new ResetPassword();
+                resetInfo.Id = fgInfo.UserId;
+                return View(resetInfo);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPassword resetInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                var fgInfo = db.PinManagers.Find(resetInfo.Id);
+                var user = db.Users.Find(resetInfo.Id);
+                user.Password = resetInfo.NewPassword;
+                user.ConfirmPassword = resetInfo.ConfirmNewPassword;
+
+                db.PinManagers.Remove(fgInfo);
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            }
+            return View(resetInfo);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(Login loginInfo)
@@ -58,7 +93,15 @@ namespace ClockMe.Controllers
             var user = db.Users.FirstOrDefault(u => u.Email.Equals(loginInfo.Email));
             if (user != null)
             {
-                var body = "<p>Your password is: " + user.Password + "</p>";
+                Random generator = new Random();
+                PinManager fg = new PinManager();
+                fg.UserId = Convert.ToInt16(user.Id);
+                fg.Pin = generator.Next(1000, 9999);
+                db.PinManagers.Add(fg);
+                db.SaveChanges();
+
+                var link = Url.Action("ResetPassword", "Login", new { pin = fg.Pin }, Request.Url.Scheme);
+                var body = "<p>To reset your password follow this link:</p><a href='" + link + "'>Reset password</a>";
                 var message = new MailMessage();
                 message.To.Add(new MailAddress(loginInfo.Email));
                 message.From = new MailAddress("clockmecontact@gmail.com");
@@ -87,6 +130,11 @@ namespace ClockMe.Controllers
         }
 
         public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }

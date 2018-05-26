@@ -163,6 +163,7 @@
     <Compile Include="Controllers\PinManagerController.cs" />
     <Compile Include="Controllers\PlanningCalendarController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\TimesheetsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -193,6 +194,7 @@
     <Compile Include="Models\PlanningCalendar.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ResetPassword.cs" />
     <Compile Include="Models\Timesheet.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
@@ -281,11 +283,11 @@
     <Content Include="Views\Register\RegisterDone.cshtml" />
     <Content Include="Views\Login\ForgotPassword.cshtml" />
     <Content Include="Views\Login\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Login\ResetPassword.cshtml" />
+    <Content Include="Views\Login\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Arduino\" />
-    <Folder Include="Views\PinManager\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

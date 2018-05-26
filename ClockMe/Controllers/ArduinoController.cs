@@ -73,14 +73,14 @@ namespace ClockMe.Controllers
 
         private string RegisterUser(string id)
         {
-            var rg = new Register
+            var pinManager = new PinManager
             {
-                Id = Convert.ToInt16(id),
+                UserId = Convert.ToInt16(id),
                 Pin = new Random().Next(1000, 9999)
             };
-            db.Registers.Add(rg);
+            db.PinManagers.Add(pinManager);
             db.SaveChanges();
-            return rg.Pin.ToString();
+            return pinManager.Pin.ToString();
         }
 
         private string GetNextId()

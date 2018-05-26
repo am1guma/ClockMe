@@ -61,11 +61,11 @@ namespace ClockMe.Controllers
             if (ModelState.IsValid)
             {
                 var regId = Convert.ToInt16(Session["RegisterId"]);
-                var register = db.Registers.First(reg => reg.Id == regId);
-                user.Id = register.Id;
+                var pinManager = db.PinManagers.First(pin => pin.UserId == regId);
+                user.Id = pinManager.UserId;
                 user.Role = "user";
                 db.Users.Add(user);
-                db.Registers.Remove(register);
+                db.PinManagers.Remove(pinManager);
                 db.SaveChanges();
                 return RedirectToAction("RegisterDone","Register");
             }
