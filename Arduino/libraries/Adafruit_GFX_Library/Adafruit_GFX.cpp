@@ -461,7 +461,7 @@ void Adafruit_GFX::fillTriangle(int16_t x0, int16_t y0,
 
 // Draw a PROGMEM-resident 1-bit image at the specified (x,y) position,
 // using the specified foreground color (unset bits are transparent).
-void Adafruit_GFX::drawBitmap(int16_t x, int16_t y,
+void Adafruit_GFX::drawBitmapMy(int16_t x, int16_t y,
   const uint8_t bitmap[], int16_t w, int16_t h, uint16_t color) {
 
     int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte

@@ -119,6 +119,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.4\lib\net461\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.4\lib\net461\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Diagnostics.DiagnosticSource">
@@ -155,6 +161,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Global.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\ArduinoController.cs" />
@@ -212,8 +219,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\ClockMeModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ClockMeModel.Context.cs</LastGenOutput>
       <DependentUpon>ClockMeModel.edmx</DependentUpon>
+      <LastGenOutput>ClockMeModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\ClockMeModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -276,17 +283,13 @@
     <Content Include="Views\Timesheets\Edit.cshtml" />
     <Content Include="Views\Timesheets\Index.cshtml" />
     <Content Include="Views\PlanningCalendar\Index.cshtml" />
-    <Content Include="Views\PlanningCalendar\Create.cshtml" />
-    <Content Include="Views\PlanningCalendar\Delete.cshtml" />
-    <Content Include="Views\PlanningCalendar\Details.cshtml" />
-    <Content Include="Views\PlanningCalendar\Edit.cshtml" />
     <Content Include="Views\Register\RegisterDone.cshtml" />
     <Content Include="Views\Login\ForgotPassword.cshtml" />
     <Content Include="Views\Login\ForgotPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Arduino\" />
+    <Folder Include="Global\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -297,7 +300,9 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
