@@ -108,7 +108,8 @@ namespace ClockMe.Controllers
                 Type = type
             };
             db.Activities.Add(inActivity);
-            db.SaveChanges();
+            db.SaveChanges(); if (Global.QrBytes.Count == 0)
+            Global.QrBytes = null;
             return db.Users.Find(Convert.ToInt32(id))?.FirstName;
         }
 
@@ -122,10 +123,6 @@ namespace ClockMe.Controllers
 
             var qrCode = Global.QrBytes.ElementAt(0);
             Global.QrBytes.RemoveAt(0);
-            if (Global.QrBytes.Count == 0)
-            {
-                Global.QrBytes = null;
-            }
             return qrCode;
         }
     }
