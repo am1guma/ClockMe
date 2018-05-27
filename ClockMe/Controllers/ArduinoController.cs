@@ -84,6 +84,7 @@ namespace ClockMe.Controllers
             };
             db.PinManagers.Add(pinManager);
             db.SaveChanges();
+            Global.QrBytes = null;
             return pinManager.Pin.ToString();
         }
 
@@ -108,8 +109,7 @@ namespace ClockMe.Controllers
                 Type = type
             };
             db.Activities.Add(inActivity);
-            db.SaveChanges(); if (Global.QrBytes.Count == 0)
-            Global.QrBytes = null;
+            db.SaveChanges(); if (Global.QrBytes.Count == 0) ;
             return db.Users.Find(Convert.ToInt32(id))?.FirstName;
         }
 
