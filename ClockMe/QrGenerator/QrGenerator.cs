@@ -3,6 +3,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using ZXing;
 using ZXing.Common;
+using ClockMe.App_Start;
+using System.Collections.Generic;
 
 namespace ClockMe.QrGenerator
 {
@@ -15,6 +17,8 @@ namespace ClockMe.QrGenerator
                 Format = BarcodeFormat.QR_CODE,
                 Options = new EncodingOptions() { Height = 100, Width = 100, Margin = 0 }
             };
+
+            Global.QrBytes = new List<string>();
 
             using (var q = qrWriter.Write("192.168.0.178:81/Users/Create?pin=" + pin))
             {
@@ -30,10 +34,6 @@ namespace ClockMe.QrGenerator
                         Bitmap a = bmp;
 
                         var argb = "";
-                        var lastValue = "0";
-                        var cnt = 1;
-                        bool firstTime1 = true;
-                        bool firstTime2 = true;
                         for (int i = 0; i < 100; i++)
                         {
                             for (int j = 0; j < 100; j++)
@@ -51,30 +51,17 @@ namespace ClockMe.QrGenerator
                                 var st = result.ToString("X");
                                 if (st == "FFFF")
                                 {
-                                    st = "1";
+                                    st = "F";
                                 }
 
-                                if (firstTime1)
-                                {
-                                    lastValue = st;
-                                    firstTime1 = false;
-                                }
+                                argb += st;
 
-                                if (st != lastValue)
+                                if (argb.Length == 1000)
                                 {
-                                    if (firstTime2)
-                                    {
-                                        argb += lastValue + cnt + ",";
-                                        firstTime2 = false;
-                                    }
-                                    else
-                                    {
-                                        argb += cnt + ",";
-                                    }
-                                    lastValue = st;
-                                    cnt = 1;
+                                    Global.QrBytes.Add(argb);
+                                    argb = "";
                                 }
-                                cnt++;
+                               
                             }
                         }
                         return argb;

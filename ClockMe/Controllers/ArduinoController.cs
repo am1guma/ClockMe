@@ -115,7 +115,18 @@ namespace ClockMe.Controllers
         public object GetQrBytes(string id)
         {
             var pinManager = db.PinManagers.Find(Convert.ToInt32(id));
-            return QrGenerator.QrGenerator.GenerateQrCode(pinManager.Pin.ToString()).ToString();
+            if (Global.QrBytes == null)
+            {
+                QrGenerator.QrGenerator.GenerateQrCode(pinManager.Pin.ToString());
+            }
+
+            var qrCode = Global.QrBytes.ElementAt(0);
+            Global.QrBytes.RemoveAt(0);
+            if (Global.QrBytes.Count == 0)
+            {
+                Global.QrBytes = null;
+            }
+            return qrCode;
         }
     }
 }
