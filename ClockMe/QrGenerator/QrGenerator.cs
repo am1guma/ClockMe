@@ -30,6 +30,10 @@ namespace ClockMe.QrGenerator
                         Bitmap a = bmp;
 
                         var argb = "";
+                        var lastValue = "0";
+                        var cnt = 1;
+                        bool firstTime1 = true;
+                        bool firstTime2 = true;
                         for (int i = 0; i < 100; i++)
                         {
                             for (int j = 0; j < 100; j++)
@@ -49,7 +53,28 @@ namespace ClockMe.QrGenerator
                                 {
                                     st = "1";
                                 }
-                                argb += st;
+
+                                if (firstTime1)
+                                {
+                                    lastValue = st;
+                                    firstTime1 = false;
+                                }
+
+                                if (st != lastValue)
+                                {
+                                    if (firstTime2)
+                                    {
+                                        argb += lastValue + cnt + ",";
+                                        firstTime2 = false;
+                                    }
+                                    else
+                                    {
+                                        argb += cnt + ",";
+                                    }
+                                    lastValue = st;
+                                    cnt = 1;
+                                }
+                                cnt++;
                             }
                         }
                         return argb;
