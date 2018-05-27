@@ -15,9 +15,13 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Activities
-        public ActionResult Index()
+        public ActionResult Index(string email, string type)
         {
-            var activities = db.Activities.Include(a => a.User);
+            var activities = from a in db.Activities select a;
+            if (email != null && type != null)
+            {
+                activities = activities.Where(s => s.User.Email.Contains(email) && s.Type.Contains(type));
+            }
             return View(activities.ToList());
         }
 

@@ -26,6 +26,25 @@ namespace ClockMe.Controllers
             return View(users.ToList());
         }
 
+        public ActionResult UserSettings()
+        {
+            User user = db.Users.Find(1);
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserSettings([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index","Home");
+            }
+            return View(user);
+        }
+
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {

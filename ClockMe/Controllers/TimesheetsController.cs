@@ -15,9 +15,13 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Timesheets
-        public ActionResult Index()
+        public ActionResult Index(string email, string hours, string type)
         {
-            var timesheets = db.Timesheets.Include(t => t.User);
+            var timesheets = from t in db.Timesheets select t;
+            if (email != null && type != null)
+            {
+                timesheets = timesheets.Where(s => s.User.Email.Contains(email) && s.Hours.ToString().Contains(hours) && s.Type.Contains(type));
+            }
             return View(timesheets.ToList());
         }
 
@@ -39,7 +43,7 @@ namespace ClockMe.Controllers
         // GET: Timesheets/Create
         public ActionResult Create()
         {
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Email");
             return View();
         }
 
@@ -57,7 +61,7 @@ namespace ClockMe.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Email", timesheet.UserId);
             return View(timesheet);
         }
 
@@ -73,7 +77,6 @@ namespace ClockMe.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
             return View(timesheet);
         }
 
@@ -90,7 +93,6 @@ namespace ClockMe.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", timesheet.UserId);
             return View(timesheet);
         }
 
