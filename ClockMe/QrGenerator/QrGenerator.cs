@@ -45,9 +45,9 @@ namespace ClockMe.QrGenerator
 
                                 int result = r | g | b;
                                 var st = result.ToString("X");
-                                if (st == "0")
+                                if (st == "FFFF")
                                 {
-                                    st = "0000";
+                                    st = "1";
                                 }
                                 argb += st;
                             }
