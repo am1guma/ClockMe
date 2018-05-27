@@ -14,17 +14,6 @@ namespace ClockMe.Controllers
         // GET: Register
         public ActionResult Index()
         {
-            var pin = Request.QueryString["pin"];
-            if (pin != null)
-            {
-                var convertedPin = Convert.ToInt32(pin);
-                var pinManager = db.PinManagers.FirstOrDefault(p => p.Pin.Equals(convertedPin));
-                if (pinManager != null)
-                {
-                    Session["RegisterId"] = pinManager.UserId;
-                    return RedirectToAction("Create", "Users");
-                }
-            }
             return View();
         }
 
@@ -35,8 +24,7 @@ namespace ClockMe.Controllers
             var _pinManager = db.PinManagers.FirstOrDefault(pin => pin.Pin.Equals(pinManager.Pin));
             if (_pinManager != null)
             {
-                Session["RegisterId"] = _pinManager.UserId;
-                return RedirectToAction("Create", "Users");
+                return RedirectToAction("Create", "Users", new { pin = _pinManager.Pin });
             }
             ModelState.AddModelError("Pin", "Pin is incorrect!");
             return View(pinManager);
@@ -44,11 +32,7 @@ namespace ClockMe.Controllers
 
         public ActionResult RegisterDone()
         {
-            if (Session["RegisterId"] != null)
-            {
-                return View();
-            }
-            return RedirectToAction("Index", "Login");
+            return View();
         }
     }
 }

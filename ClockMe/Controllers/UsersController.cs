@@ -42,11 +42,16 @@ namespace ClockMe.Controllers
         }
 
         // GET: Users/Create
-        public ActionResult Create()
+        public ActionResult Create(string pin)
         {
-            if (Session["RegisterId"] != null)
+            var pinInDb = db.PinManagers.FirstOrDefault(p => p.Pin.ToString() == pin);
+            if (pinInDb != null)
             {
-                return View();
+                var user = new User
+                {
+                    Id = pinInDb.UserId
+                };
+                return View(user);
             }
             return RedirectToAction("Index", "Register");
         }
@@ -60,9 +65,7 @@ namespace ClockMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                var regId = Convert.ToInt16(Session["RegisterId"]);
-                var pinManager = db.PinManagers.First(pin => pin.UserId == regId);
-                user.Id = pinManager.UserId;
+                var pinManager = db.PinManagers.First(pin => pin.UserId == user.Id);
                 user.Role = "user";
                 db.Users.Add(user);
                 db.PinManagers.Remove(pinManager);

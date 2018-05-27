@@ -52,14 +52,15 @@ namespace ClockMe.Controllers
             return View();
         }
 
-        public ActionResult ResetPassword()
+        public ActionResult ResetPassword(string pin)
         {
-            var pin = Convert.ToInt32(Request.QueryString["pin"]);
-            var fgInfo = db.PinManagers.FirstOrDefault(f => f.Pin.Equals(pin));
-            if (fgInfo != null)
+            var pinManager = db.PinManagers.FirstOrDefault(f => f.Pin.ToString() == pin);
+            if (pinManager != null)
             {
-                ResetPassword resetInfo = new ResetPassword();
-                resetInfo.Id = fgInfo.UserId;
+                ResetPassword resetInfo = new ResetPassword
+                {
+                    Id = pinManager.UserId
+                };
                 return View(resetInfo);
             }
             return RedirectToAction("Index");

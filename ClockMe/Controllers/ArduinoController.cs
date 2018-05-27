@@ -40,6 +40,10 @@ namespace ClockMe.Controllers
                 {
                     return RegisterActivity(id, "out");
                 }
+                case "6":
+                {
+                    return GetQrBytes(id);
+                }
             }
             return "0";
         }
@@ -106,6 +110,12 @@ namespace ClockMe.Controllers
             db.Activities.Add(inActivity);
             db.SaveChanges();
             return db.Users.Find(Convert.ToInt32(id))?.FirstName;
+        }
+
+        public object GetQrBytes(string id)
+        {
+            var pinManager = db.PinManagers.Find(Convert.ToInt32(id));
+            return QrGenerator.QrGenerator.GenerateQrCode(pinManager.Pin.ToString()).ToString();
         }
     }
 }

@@ -17,13 +17,17 @@ namespace ClockMe.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(PinManager pinManager)
         {
-            var register = db.PinManagers.FirstOrDefault(reg => reg.Pin.Equals(pinManager.Pin));
-            if (register != null)
+            if (db.PinManagers.FirstOrDefault(reg => reg.Pin.Equals(pinManager.Pin)) != null)
             {
-                Session["RegisterId"] = register.UserId;
-                //cand nu exista user cu id in tabela users
-                return RedirectToAction("Create", "Users");
-                //cand exista redirect la reset pass
+                var user = db.Users.Find(pinManager.UserId);
+                if (user == null)
+                {
+                    return RedirectToAction("Create", "Users", new { pin = pinManager.Pin });
+                }
+                else
+                {
+                    return RedirectToAction("ResetPassword", "Login", new { pin = pinManager.Pin });
+                }
             }
             else
             {
