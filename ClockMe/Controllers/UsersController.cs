@@ -42,6 +42,8 @@ namespace ClockMe.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = Global.GetMd5Hash(user.Password);
+                user.ConfirmPassword = Global.GetMd5Hash(user.ConfirmPassword);
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index", "Home");
@@ -88,12 +90,14 @@ namespace ClockMe.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,Email,Password,ConfirmPassword,Role,WorkingHours")] User user)
         {
             if (ModelState.IsValid)
             {
                 var pinManager = db.PinManagers.First(pin => pin.UserId == user.Id);
                 user.Role = "user";
+                user.Password = Global.GetMd5Hash(user.Password);
+                user.ConfirmPassword = Global.GetMd5Hash(user.ConfirmPassword);
                 db.Users.Add(user);
                 db.PinManagers.Remove(pinManager);
                 db.SaveChanges();
@@ -125,7 +129,7 @@ namespace ClockMe.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,Email,Password,ConfirmPassword,Role,WorkingHours")] User user)
         {
             user.ConfirmPassword = user.Password;
             ModelState["ConfirmPassword"].Errors.Clear();

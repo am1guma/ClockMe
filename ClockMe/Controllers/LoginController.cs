@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using ClockMe.Models;
+using ClockMe.App_Start;
 
 namespace ClockMe.Controllers
 {
@@ -27,6 +28,7 @@ namespace ClockMe.Controllers
             var u = db.Users.FirstOrDefault(s => s.Email.Equals(user.Email));
             if (u != null)
             {
+                user.Password = Global.GetMd5Hash(user.Password);
                 if (u.Password.Equals(user.Password))
                 {
                     Session["UserId"] = u.Id;
@@ -75,8 +77,8 @@ namespace ClockMe.Controllers
             {
                 var fgInfo = db.PinManagers.Find(user.Id);
                 var u = db.Users.Find(user.Id);
-                u.Password = user.Password;
-                u.ConfirmPassword = user.ConfirmPassword;
+                u.Password = Global.GetMd5Hash(user.Password);
+                u.ConfirmPassword = Global.GetMd5Hash(user.ConfirmPassword);
 
                 db.PinManagers.Remove(fgInfo);
                 db.Entry(u).State = EntityState.Modified;

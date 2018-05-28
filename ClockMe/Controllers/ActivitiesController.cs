@@ -67,6 +67,11 @@ namespace ClockMe.Controllers
         public ActionResult Create()
         {
             ViewBag.UserId = new SelectList(db.Users, "Id", "Email");
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var id = Convert.ToInt32(Session["UserId"]);
+                return View(new Activity { UserId = id, Time = DateTime.Now});
+            }
             return View();
         }
 
@@ -85,6 +90,8 @@ namespace ClockMe.Controllers
             }
 
             ViewBag.UserId = new SelectList(db.Users, "Id", "Email", activity.UserId);
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+                ViewBag.UserId = Session["UserId"].ToString();
             return View(activity);
         }
 
