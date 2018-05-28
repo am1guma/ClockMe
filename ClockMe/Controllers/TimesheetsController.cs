@@ -24,6 +24,8 @@ namespace ClockMe.Controllers
             }
             if (email != null && startDate != null && endDate != null && type != null)
             {
+                if (type == "all")
+                    type = "";
                 var sd = new DateTime(1000, 1, 1);
                 var ed = new DateTime(3000, 1, 1);
                 if (startDate != "")
