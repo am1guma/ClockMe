@@ -18,6 +18,8 @@ namespace ClockMe.Controllers
         // GET: Users
         public ActionResult Index(string firstName, string lastName, string email, string role, string workingHours)
         {
+            if (Session["Role"].ToString() != "admin")
+                return RedirectToAction("Index", "Home");
             var users = from u in db.Users select u;
             if (firstName != null && lastName != null && email != null && role != null && workingHours != null)
             {
@@ -28,13 +30,13 @@ namespace ClockMe.Controllers
 
         public ActionResult UserSettings()
         {
-            User user = db.Users.Find(1);
+            User user = db.Users.Find(Convert.ToInt32(Session["UserId"]));
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserSettings([Bind(Include = "Id,FirstName,LastName,Email,Password,Role,WorkingHours")] User user)
+        public ActionResult UserSettings([Bind(Include = "Id,FirstName,LastName,Email,Password,ConfirmPassword,Role,WorkingHours")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -48,6 +50,8 @@ namespace ClockMe.Controllers
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
+            if (Session["Role"].ToString() != "admin")
+                return RedirectToAction("Index", "Home");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -63,6 +67,8 @@ namespace ClockMe.Controllers
         // GET: Users/Create
         public ActionResult Create(string pin)
         {
+            if (Session["Role"].ToString() != "admin")
+                return RedirectToAction("Index", "Home");
             var pinInDb = db.PinManagers.FirstOrDefault(p => p.Pin.ToString() == pin);
             if (pinInDb != null)
             {
@@ -98,6 +104,8 @@ namespace ClockMe.Controllers
         // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["Role"].ToString() != "admin")
+                return RedirectToAction("Index", "Home");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -129,6 +137,8 @@ namespace ClockMe.Controllers
         // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["Role"].ToString() != "admin")
+                return RedirectToAction("Index", "Home");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

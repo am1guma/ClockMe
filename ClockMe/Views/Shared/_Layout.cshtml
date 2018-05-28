@@ -1,5 +1,5 @@
 ﻿@{
-    if (Session["userId"] == null)
+    if (Session["UserId"] == null)
     {
         if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create") && !Request.Path.Contains("/Arduino"))
         {
@@ -30,7 +30,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Users"><span class="glyphicon glyphicon-user"></span> Users</a></li>
+                    <li><a href="/Users" id="UsersItem"><span class="glyphicon glyphicon-user"></span> Users</a></li>
                     <li><a href="/Activities"><span class="glyphicon glyphicon-hourglass"></span> Activities</a></li>
                     <li><a href="/Timesheets"><span class="glyphicon glyphicon-time"></span> Timesheets</a></li>
                     <li><a href="/PlanningCalendar"><span class="glyphicon glyphicon-calendar"></span> Planning calendar</a></li>
@@ -62,10 +62,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 
     <script type="text/javascript">
-        var userId = '@Session["userId"]';
+        $("#UsersItem").hide();
+        var userId = '@Session["UserId"]';
         if (userId) {
             $("#LoginMenu").hide();
             $("#LogoutMenu").show();
+            var role = '@Session["Role"]';
+            if (role == "admin") {
+                $("#UsersItem").show();
+            }
         } else {
             $("#LoginMenu").show();
             $("#LogoutMenu").hide();

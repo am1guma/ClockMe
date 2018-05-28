@@ -12,45 +12,53 @@
 
 @using (Html.BeginForm())
 {
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="control-label col-md-2">Email</label>
-        <div class="col-md-10">
-            <input type="text" class="form-control" id="Email" name="Email">
-        </div>
-    </div>
+    <div class="form-horizontal">
+        @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2">Email</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="Email" name="Email">
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label class="control-label col-md-2">Time</label>
-        <div class="col-md-10">
-            <div class='input-group date' style="max-width: 598px;">
-                <input id='StartDatetimepicker' type="text" class="form-control">
-                <span class="input-group-addon">to</span>
-                <input id='EndDatetimepicker' type="text" class="form-control">
+        }
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Time</label>
+            <div class="col-md-10">
+                <div class='input-group date' style="max-width: 598px;">
+                    <input type="text" class="form-control" id="StartDate" name="StartDate">
+                    <span class="input-group-addon">to</span>
+                    <input type="text" class="form-control" id="EndDate" name="EndDate">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Type</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="Type" name="Type">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Filter" class="btn btn-default" />
             </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <label class="control-label col-md-2">Type</label>
-        <div class="col-md-10">
-            <input type="text" class="form-control" id="Type" name="Type">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Filter" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </th>
+        @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+        {
+            <th>
+
+                @Html.DisplayNameFor(model => model.User.Email)
+            </th>
+        }
         <th>
             @Html.DisplayNameFor(model => model.Time)
         </th>
@@ -63,9 +71,12 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
-            </td>
+            @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
             </td>
@@ -85,11 +96,11 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            $('#StartDatetimepicker').datetimepicker({
-                format: 'MM.DD.YYYY HH:mm'
+            $('#StartDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm'
             });
-            $('#EndDatetimepicker').datetimepicker({
-                format: 'MM.DD.YYYY HH:mm'
+            $('#EndDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm'
             });
         });
     </script>

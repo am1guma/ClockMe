@@ -22,14 +22,15 @@ namespace ClockMe.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Login loginInfo)
+        public ActionResult Index(User user)
         {
-            var user = db.Users.FirstOrDefault(u => u.Email.Equals(loginInfo.Email));
-            if (user != null)
+            var u = db.Users.FirstOrDefault(s => s.Email.Equals(user.Email));
+            if (u != null)
             {
-                if (user.Password.Equals(loginInfo.Password))
+                if (u.Password.Equals(user.Password))
                 {
-                    Session["userId"] = user.Id;
+                    Session["UserId"] = u.Id;
+                    Session["Role"] = u.Role;
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("Password", "Password incorrect!");
@@ -38,12 +39,12 @@ namespace ClockMe.Controllers
             {
                 ModelState.AddModelError("Email", "Email does not exist!");
             }
-            return View(loginInfo);
+            return View(user);
         }
 
         public ActionResult Logout()
         {
-            Session["userId"] = null;
+            Session["UserId"] = null;
             return RedirectToAction("Index");
         }
 
@@ -57,46 +58,46 @@ namespace ClockMe.Controllers
             var pinManager = db.PinManagers.FirstOrDefault(f => f.Pin.ToString() == pin);
             if (pinManager != null)
             {
-                ResetPassword resetInfo = new ResetPassword
+                User user = new User
                 {
                     Id = pinManager.UserId
                 };
-                return View(resetInfo);
+                return View(user);
             }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(ResetPassword resetInfo)
+        public ActionResult ResetPassword(User user)
         {
             if (ModelState.IsValid)
             {
-                var fgInfo = db.PinManagers.Find(resetInfo.Id);
-                var user = db.Users.Find(resetInfo.Id);
-                user.Password = resetInfo.NewPassword;
-                user.ConfirmPassword = resetInfo.ConfirmNewPassword;
+                var fgInfo = db.PinManagers.Find(user.Id);
+                var u = db.Users.Find(user.Id);
+                u.Password = user.Password;
+                u.ConfirmPassword = user.ConfirmPassword;
 
                 db.PinManagers.Remove(fgInfo);
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(u).State = EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("ResetPasswordConfirmation");
 
             }
-            return View(resetInfo);
+            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(Login loginInfo)
+        public ActionResult ForgotPassword(User user)
         {
-            var user = db.Users.FirstOrDefault(u => u.Email.Equals(loginInfo.Email));
-            if (user != null)
+            var u = db.Users.FirstOrDefault(s => s.Email.Equals(user.Email));
+            if (u != null)
             {
                 Random generator = new Random();
                 PinManager fg = new PinManager();
-                fg.UserId = Convert.ToInt16(user.Id);
+                fg.UserId = Convert.ToInt16(u.Id);
                 fg.Pin = generator.Next(1000, 9999);
                 db.PinManagers.Add(fg);
                 db.SaveChanges();
@@ -104,7 +105,7 @@ namespace ClockMe.Controllers
                 var link = Url.Action("ResetPassword", "Login", new { pin = fg.Pin }, Request.Url.Scheme);
                 var body = "<p>To reset your password follow this link:</p><a href='" + link + "'>Reset password</a>";
                 var message = new MailMessage();
-                message.To.Add(new MailAddress(loginInfo.Email));
+                message.To.Add(new MailAddress(user.Email));
                 message.From = new MailAddress("clockmecontact@gmail.com");
                 message.Subject = "Password recover";
                 message.Body = string.Format(body);
@@ -127,7 +128,7 @@ namespace ClockMe.Controllers
                 return RedirectToAction("ForgotPasswordConfirmation");
             }
             ModelState.AddModelError("Email", "Email does not exist!");
-            return View(loginInfo);
+            return View(user);
         }
 
         public ActionResult ForgotPasswordConfirmation()

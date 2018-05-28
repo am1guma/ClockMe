@@ -38,9 +38,9 @@
                         <label for="min-date" class="col-sm-3 control-label">Dates</label>
                         <div class="col-sm-8">
                             <div class='input-group date'>
-                                <input id='StartDatetimepicker' type="text" class="form-control">
+                                <input id='StartDate' type="text" class="form-control">
                                 <span class="input-group-addon">to</span>
-                                <input id='EndDatetimepicker' type="text" class="form-control">
+                                <input id='EndDate' type="text" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -62,8 +62,8 @@
             $('#event-modal input[name="event-index"]').val(event ? event.id : '');
             $('#event-modal input[name="event-name"]').val(event ? event.name : '');
             $('#event-modal input[name="event-location"]').val(event ? event.location : '');
-            $("#StartDatetimepicker").data("DateTimePicker").date(event ? event.startDate : '');
-            $("#EndDatetimepicker").data("DateTimePicker").date(event ? event.endDate : '');
+            $("#StartDate").data("DateTimePicker").date(event ? event.startDate : '');
+            $("#EndDate").data("DateTimePicker").date(event ? event.endDate : '');
             $('#event-modal').modal();
         }
 
@@ -91,8 +91,8 @@
                 id: $('#event-modal input[name="event-index"]').val(),
                 name: $('#event-modal input[name="event-name"]').val(),
                 location: $('#event-modal input[name="event-location"]').val(),
-                startDate: $("#StartDatetimepicker").data("DateTimePicker").date()._d,
-                endDate: $("#EndDatetimepicker").data("DateTimePicker").date()._d
+                startDate: $("#StartDate").data("DateTimePicker").date()._d,
+                endDate: $("#EndDate").data("DateTimePicker").date()._d
             }
 
             var dataSource = $('#calendar').data('calendar').getDataSource();
@@ -153,11 +153,11 @@
                 });
             }
 
-            $('#StartDatetimepicker').datetimepicker({
-                            format: 'MM.DD.YYYY HH:mm'
+            $('#StartDate').datetimepicker({
+                            format: 'DD.MM.YYYY HH:mm'
             });
-            $('#EndDatetimepicker').datetimepicker({
-                    format: 'MM.DD.YYYY HH:mm'
+            $('#EndDate').datetimepicker({
+                    format: 'DD.MM.YYYY HH:mm'
             });
 
                 var currentYear = new Date().getFullYear();

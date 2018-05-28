@@ -15,12 +15,23 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Activities
-        public ActionResult Index(string email, string type)
+        public ActionResult Index(string email, string startDate, string endDate, string type)
         {
             var activities = from a in db.Activities select a;
-            if (email != null && type != null)
+            if (email != null && startDate != null && endDate != null && type != null)
             {
-                activities = activities.Where(s => s.User.Email.Contains(email) && s.Type.Contains(type));
+                var sd = new DateTime(1000, 1, 1);
+                var ed = new DateTime(3000, 1, 1);
+                if(startDate != "")
+                    sd = DateTime.ParseExact(startDate, "dd.MM.yyyy HH:mm", null);
+                if (endDate != "")
+                    ed = DateTime.ParseExact(endDate, "dd.MM.yyyy HH:mm", null);
+                activities = activities.Where(s => s.User.Email.Contains(email) && s.Time >= sd && s.Time <= ed && s.Type.Contains(type));
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                activities = activities.Where(s => s.UserId == userId);
             }
             return View(activities.ToList());
         }
@@ -35,7 +46,13 @@ namespace ClockMe.Controllers
             Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (activity.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(activity);
         }
@@ -75,7 +92,13 @@ namespace ClockMe.Controllers
             Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (activity.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(activity);
         }
@@ -106,7 +129,13 @@ namespace ClockMe.Controllers
             Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (activity.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(activity);
         }

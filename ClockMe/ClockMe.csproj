@@ -193,14 +193,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClockMeModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\PinManager.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PlanningCalendar.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResetPassword.cs" />
     <Compile Include="Models\Timesheet.cs">
       <DependentUpon>ClockMeModel.tt</DependentUpon>
     </Compile>

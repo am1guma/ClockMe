@@ -24,9 +24,9 @@
             <label class="control-label col-md-2">Date</label>
             <div class="col-md-10">
                 <div class='input-group date' style="max-width: 598px;">
-                    <input id='StartDatetimepicker' type="text" class="form-control">
+                    <input id='StartDate' type="text" class="form-control">
                     <span class="input-group-addon">to</span>
-                    <input id='EndDatetimepicker' type="text" class="form-control">
+                    <input id='EndDate' type="text" class="form-control">
                 </div>
             </div>
         </div>
@@ -98,11 +98,11 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            $('#StartDatetimepicker').datetimepicker({
-                format: 'MM.DD.YYYY'
+            $('#StartDate').datetimepicker({
+                format: 'DD.MM.YYYY'
             });
-            $('#EndDatetimepicker').datetimepicker({
-                format: 'MM.DD.YYYY'
+            $('#EndDate').datetimepicker({
+                format: 'DD.MM.YYYY'
             });
         });
     </script>

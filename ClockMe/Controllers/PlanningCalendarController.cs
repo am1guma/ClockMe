@@ -16,8 +16,9 @@ namespace ClockMe.Controllers
         // GET: PlanningCalendar
         public ActionResult Index()
         {
-            var events = db.PlanningCalendars.Include(p => p.User);
-            ViewBag.events = events.ToList().Select(item => new
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var events = db.PlanningCalendars.Where(s => s.UserId == userId);
+            ViewBag.events = events.Select(item => new
             {
                 item.Id,
                 item.Name,
@@ -30,8 +31,7 @@ namespace ClockMe.Controllers
 
         public ActionResult Create(PlanningCalendar cEvent)
         {
-            //TODO get current user id
-            cEvent.UserId = 1;
+            cEvent.UserId = Convert.ToInt32(Session["UserId"]);
 
             if (cEvent.Name is null)
             {
@@ -59,8 +59,7 @@ namespace ClockMe.Controllers
 
         public ActionResult Edit(PlanningCalendar cEvent)
         {
-            //TODO get current user id
-            cEvent.UserId = 1;
+            cEvent.UserId = Convert.ToInt32(Session["UserId"]);
 
             if (cEvent.Name is null)
             {

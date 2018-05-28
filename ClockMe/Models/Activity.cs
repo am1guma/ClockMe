@@ -17,7 +17,7 @@ namespace ClockMe.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        [DisplayFormat(DataFormatString = "{0:MM.dd.yyyy HH:mm}")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public System.DateTime Time { get; set; }
         public string Type { get; set; }
     
