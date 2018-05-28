@@ -10,14 +10,16 @@
     <h4>Timesheet</h4>
     <hr />
     <dl class="dl-horizontal">
+        @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.User.Email)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.User.Email)
+            </dd>
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.Date)

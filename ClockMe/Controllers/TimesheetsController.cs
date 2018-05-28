@@ -15,12 +15,27 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Timesheets
-        public ActionResult Index(string email, string hours, string type)
+        public ActionResult Index(string email, string startDate, string endDate,string hours, string type)
         {
             var timesheets = from t in db.Timesheets select t;
-            if (email != null && type != null)
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
             {
-                timesheets = timesheets.Where(s => s.User.Email.Contains(email) && s.Hours.ToString().Contains(hours) && s.Type.Contains(type));
+                email = "";
+            }
+            if (email != null && startDate != null && endDate != null && type != null)
+            {
+                var sd = new DateTime(1000, 1, 1);
+                var ed = new DateTime(3000, 1, 1);
+                if (startDate != "")
+                    sd = DateTime.ParseExact(startDate, "dd.MM.yyyy", null);
+                if (endDate != "")
+                    ed = DateTime.ParseExact(endDate, "dd.MM.yyyy", null);
+                timesheets = timesheets.Where(s => s.User.Email.Contains(email) && s.Date >= sd && s.Date <= ed && s.Hours.ToString().Contains(hours) && s.Type.Contains(type));
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                timesheets = timesheets.Where(s => s.UserId == userId);
             }
             return View(timesheets.ToList());
         }
@@ -35,7 +50,13 @@ namespace ClockMe.Controllers
             Timesheet timesheet = db.Timesheets.Find(id);
             if (timesheet == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (timesheet.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(timesheet);
         }
@@ -75,7 +96,13 @@ namespace ClockMe.Controllers
             Timesheet timesheet = db.Timesheets.Find(id);
             if (timesheet == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (timesheet.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(timesheet);
         }
@@ -106,7 +133,13 @@ namespace ClockMe.Controllers
             Timesheet timesheet = db.Timesheets.Find(id);
             if (timesheet == null)
             {
-                return HttpNotFound();
+                RedirectToAction("Index");
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                var userId = Convert.ToInt32(Session["UserId"]);
+                if (timesheet.UserId != userId)
+                    return RedirectToAction("Index");
             }
             return View(timesheet);
         }

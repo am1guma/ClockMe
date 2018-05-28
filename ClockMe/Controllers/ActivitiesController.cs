@@ -18,6 +18,10 @@ namespace ClockMe.Controllers
         public ActionResult Index(string email, string startDate, string endDate, string type)
         {
             var activities = from a in db.Activities select a;
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
+            {
+                email = "";
+            }
             if (email != null && startDate != null && endDate != null && type != null)
             {
                 var sd = new DateTime(1000, 1, 1);

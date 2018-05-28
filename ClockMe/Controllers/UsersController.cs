@@ -18,7 +18,7 @@ namespace ClockMe.Controllers
         // GET: Users
         public ActionResult Index(string firstName, string lastName, string email, string role, string workingHours)
         {
-            if (Session["Role"].ToString() != "admin")
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
                 return RedirectToAction("Index", "Home");
             var users = from u in db.Users select u;
             if (firstName != null && lastName != null && email != null && role != null && workingHours != null)
@@ -42,7 +42,7 @@ namespace ClockMe.Controllers
             {
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             return View(user);
         }
@@ -50,7 +50,7 @@ namespace ClockMe.Controllers
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
-            if (Session["Role"].ToString() != "admin")
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
                 return RedirectToAction("Index", "Home");
             if (id == null)
             {
@@ -67,7 +67,7 @@ namespace ClockMe.Controllers
         // GET: Users/Create
         public ActionResult Create(string pin)
         {
-            if (Session["Role"].ToString() != "admin")
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
                 return RedirectToAction("Index", "Home");
             var pinInDb = db.PinManagers.FirstOrDefault(p => p.Pin.ToString() == pin);
             if (pinInDb != null)
@@ -95,7 +95,7 @@ namespace ClockMe.Controllers
                 db.Users.Add(user);
                 db.PinManagers.Remove(pinManager);
                 db.SaveChanges();
-                return RedirectToAction("RegisterDone","Register");
+                return RedirectToAction("RegisterDone", "Register");
             }
 
             return View(user);
@@ -104,7 +104,7 @@ namespace ClockMe.Controllers
         // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (Session["Role"].ToString() != "admin")
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
                 return RedirectToAction("Index", "Home");
             if (id == null)
             {
@@ -137,7 +137,7 @@ namespace ClockMe.Controllers
         // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (Session["Role"].ToString() != "admin")
+            if (Session["Role"] != null && Session["Role"].ToString() != "admin")
                 return RedirectToAction("Index", "Home");
             if (id == null)
             {

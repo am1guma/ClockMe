@@ -11,14 +11,16 @@
     <h4>Activity</h4>
     <hr />
     <dl class="dl-horizontal">
+        @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.User.Email)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.User.Email)
+            </dd>
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.Time)
@@ -38,7 +40,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

@@ -1,9 +1,9 @@
 ﻿@{
     if (Session["UserId"] == null)
     {
-        if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create") && !Request.Path.Contains("/Arduino"))
+        if (!Request.Path.Contains("/Login") && !Request.Path.Contains("/Register") && !Request.Path.Contains("/Users/Create") && !Request.Path.Contains("/Arduino") && !Request.Path.Contains("/Home"))
         {
-            Response.Redirect("~/Login/Index");
+            Response.Redirect("~/Home/Index");
         }
     }
 }
@@ -29,7 +29,7 @@
                 <a class="navbar-brand" href="/Home">ClockMe</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" id="Menu">
                     <li><a href="/Users" id="UsersItem"><span class="glyphicon glyphicon-user"></span> Users</a></li>
                     <li><a href="/Activities"><span class="glyphicon glyphicon-hourglass"></span> Activities</a></li>
                     <li><a href="/Timesheets"><span class="glyphicon glyphicon-time"></span> Timesheets</a></li>
@@ -62,11 +62,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 
     <script type="text/javascript">
+        $("#Menu").hide();
         $("#UsersItem").hide();
         var userId = '@Session["UserId"]';
         if (userId) {
             $("#LoginMenu").hide();
             $("#LogoutMenu").show();
+            $("#Menu").show();
             var role = '@Session["Role"]';
             if (role == "admin") {
                 $("#UsersItem").show();
