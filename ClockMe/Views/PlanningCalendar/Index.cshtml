@@ -160,10 +160,12 @@
                     format: 'DD.MM.YYYY HH:mm'
             });
 
-                var currentYear = new Date().getFullYear();
+            var currentYear = new Date().getFullYear();
+            var currentMonth = new Date().getMonth();
+            var currentDay = new Date().getDate();
 
             $('#calendar').calendar({
-                    enableContextMenu: true,
+                enableContextMenu: true,
                 enableRangeSelection: true,
                 contextMenuItems: [
                     {
@@ -212,7 +214,14 @@
                     },
                 dayContextMenu: function (e) {
                     $(e.element).popover('hide');
-                    },
+                },
+                customDayRenderer: function (element, date) {
+                    var $element = $(element);
+                    var $parent = $element.parent();
+                    if (currentDay === date.getDate() && currentMonth === date.getMonth()) {
+                        $element.css("border","4px solid red")
+                    }
+                },
                 dataSource: dataSource
             });
 

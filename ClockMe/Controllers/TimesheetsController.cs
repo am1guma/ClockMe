@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using ClockMe.App_Start;
 using ClockMe.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using iTextSharp.text.html.simpleparser;
 
 namespace ClockMe.Controllers
 {
@@ -15,15 +23,18 @@ namespace ClockMe.Controllers
         private ClockMeContext db = new ClockMeContext();
 
         // GET: Timesheets
-        public ActionResult Index(string email, string startDate, string endDate,string hours, string type)
+        public ActionResult Index(string email, string startDate, string endDate, string hours, string type)
         {
             var timesheets = from t in db.Timesheets select t;
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")
             {
                 email = "";
             }
-            if (email != null && startDate != null && endDate != null && type != null)
+            if (email != null && startDate != null && endDate != null && hours != null && type != null)
             {
+                ViewBag.email = email;
+                ViewBag.hours = hours;
+                ViewBag.type = type;
                 if (type == "all")
                     type = "";
                 var sd = new DateTime(1000, 1, 1);
@@ -39,7 +50,15 @@ namespace ClockMe.Controllers
                 var userId = Convert.ToInt32(Session["UserId"]);
                 timesheets = timesheets.Where(s => s.UserId == userId);
             }
-            return View(timesheets.ToList());
+            Global.CurrentTimesheets = timesheets.Select(item => new
+            {
+                item.User.Email,
+                item.Date,
+                item.Hours,
+                item.Type
+            }).OrderByDescending(s => s.Date).ToList();
+            Global.Total = timesheets.Select(s => s.Hours).DefaultIfEmpty().Sum();
+            return View(timesheets.OrderByDescending(s => s.Date).ToList());
         }
 
         // GET: Timesheets/Details/5
@@ -70,7 +89,7 @@ namespace ClockMe.Controllers
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")
             {
                 var id = Convert.ToInt32(Session["UserId"]);
-                return View(new Timesheet { UserId = id, Date = DateTime.Now });
+                return View(new Timesheet { UserId = id });
             }
             return View();
         }
@@ -162,6 +181,54 @@ namespace ClockMe.Controllers
             db.Timesheets.Remove(timesheet);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportToExcel()
+        {
+            var gv = new GridView
+            {
+                DataSource = Global.CurrentTimesheets
+            };
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            var currentDate = DateTime.Now;
+            Response.AddHeader("content-disposition", "attachment; filename=Timesheets_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Output.Write("Total Hours: ");
+            Response.Output.Write(Global.Total);
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+
+        public FileResult ExportToPdf()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                var gv = new GridView
+                {
+                    DataSource = Global.CurrentTimesheets
+                };
+                gv.DataBind();
+                var currentDate = DateTime.Now;
+                StringWriter objStringWriter = new StringWriter();
+                HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+                gv.RenderControl(objHtmlTextWriter);
+                objHtmlTextWriter.InnerWriter.Write("<div>Total Hours: " + Global.Total + "</div>");
+                StringReader sr = new StringReader(objStringWriter.ToString());
+                Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                pdfDoc.Close();
+                return File(stream.ToArray(), "application/pdf", "Timesheets_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".pdf");
+            }
         }
 
         protected override void Dispose(bool disposing)

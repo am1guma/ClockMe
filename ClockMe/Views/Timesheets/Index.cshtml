@@ -12,14 +12,14 @@
 
 @using (Html.BeginForm())
 {
-    <div class="form-horizontal">
+    <div class="form-horizontal" id="FilterForm">
 
         @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
         {
             <div class="form-group">
                 <label class="control-label col-md-2">Email</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control" id="Email" name="Email">
+                    <input type="text" class="form-control" id="Email" name="Email" value="@ViewBag.email">
                 </div>
             </div>
         }
@@ -38,7 +38,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Hours</label>
             <div class="col-md-10">
-                <input type="text" class="form-control" id="Hours" name="Hours">
+                <input type="text" class="form-control" id="Hours" name="Hours" value="@ViewBag.hours">
             </div>
         </div>
 
@@ -56,7 +56,10 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Filter" class="btn btn-default" />
+                <input type="submit" value="Filter" class="btn btn-default" id="FilterButton" />
+                <input type="button" value="Reset" class="btn btn-default" id="ResetButton" />
+                @Html.ActionLink("Export to Excel", "ExportToExcel", "Timesheets", null, new { @class = "btn btn-success" })
+                @Html.ActionLink("Export to Pdf", "ExportToPdf", "Timesheets", null, new { @class = "btn btn-danger" })
             </div>
         </div>
     </div>
@@ -118,6 +121,15 @@
             });
             $('#EndDate').datetimepicker({
                 format: 'DD.MM.YYYY'
+            });
+            var type = "@ViewBag.type";
+            if (type) {
+                $("#Type").val(type);
+            }
+            $("#ResetButton").click(function () {
+                $("#FilterForm :input").removeAttr('value');
+                $("#Type").val("all");
+                $("#FilterButton").trigger("click");
             });
         });
     </script>

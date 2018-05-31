@@ -8,6 +8,13 @@ using System.Web;
 using System.Web.Mvc;
 using ClockMe.Models;
 using ClockMe.App_Start;
+using System.Web.UI.WebControls;
+using System.IO;
+using System.Web.UI;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using iTextSharp.text.html.simpleparser;
 
 namespace ClockMe.Controllers
 {
@@ -23,16 +30,30 @@ namespace ClockMe.Controllers
             var users = from u in db.Users select u;
             if (firstName != null && lastName != null && email != null && role != null && workingHours != null)
             {
+                ViewBag.firstName = firstName;
+                ViewBag.lastName = lastName;
+                ViewBag.email = email;
+                ViewBag.role = role;
+                ViewBag.workingHours = workingHours;
                 if (role == "all")
                     role = "";
                 users = users.Where(s => s.FirstName.Contains(firstName) && s.LastName.Contains(lastName) && s.Email.Contains(email) && s.Role.Contains(role) && s.WorkingHours.ToString().Contains(workingHours));
             }
+            Global.CurrentUsers = users.Select(item => new
+            {
+                item.FirstName,
+                item.LastName,
+                item.Email,
+                item.Role,
+                item.WorkingHours
+            }).ToList();
             return View(users.ToList());
         }
 
         public ActionResult UserSettings()
         {
             User user = db.Users.Find(Convert.ToInt32(Session["UserId"]));
+            user.Password = "";
             return View(user);
         }
 
@@ -42,8 +63,19 @@ namespace ClockMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.Password = Global.GetMd5Hash(user.Password);
-                user.ConfirmPassword = Global.GetMd5Hash(user.ConfirmPassword);
+                if (user.Password == null || user.ConfirmPassword == null)
+                {
+                    User u = db.Users.Find(Convert.ToInt32(Session["UserId"]));
+                    user.Password = u.Password;
+                    user.ConfirmPassword = u.Password;
+                    db.Dispose();
+                    db = new ClockMeContext();
+                }
+                else
+                {
+                    user.Password = Global.GetMd5Hash(user.Password);
+                    user.ConfirmPassword = Global.GetMd5Hash(user.ConfirmPassword);
+                }
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index", "Home");
@@ -170,6 +202,51 @@ namespace ClockMe.Controllers
             Global.IdToBeDeleted = id.ToString();
             return RedirectToAction("Index");
         }
+        public ActionResult ExportToExcel()
+        {
+            var gv = new GridView
+            {
+                DataSource = Global.CurrentUsers
+            };
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            var currentDate = DateTime.Now;
+            Response.AddHeader("content-disposition", "attachment; filename=Users_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+
+        public FileResult ExportToPdf()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                var gv = new GridView
+                {
+                    DataSource = Global.CurrentUsers
+                };
+                gv.DataBind();
+                var currentDate = DateTime.Now;
+                StringWriter objStringWriter = new StringWriter();
+                HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+                gv.RenderControl(objHtmlTextWriter);
+                StringReader sr = new StringReader(objStringWriter.ToString());
+                Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                pdfDoc.Close();
+                return File(stream.ToArray(), "application/pdf", "Users_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".pdf");
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {

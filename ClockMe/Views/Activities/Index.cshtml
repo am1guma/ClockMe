@@ -12,16 +12,15 @@
 
 @using (Html.BeginForm())
 {
-    <div class="form-horizontal">
+    <div class="form-horizontal" id="FilterForm">
         @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
         {
             <div class="form-group">
                 <label class="control-label col-md-2">Email</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control" id="Email" name="Email">
+                    <input type="text" class="form-control" id="Email" name="Email" value="@ViewBag.email">
                 </div>
             </div>
-
         }
 
         <div class="form-group">
@@ -48,7 +47,10 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Filter" class="btn btn-default" />
+                <input type="submit" value="Filter" class="btn btn-default" id="FilterButton" />
+                <input type="button" value="Reset" class="btn btn-default" id="ResetButton" />
+                @Html.ActionLink("Export to Excel", "ExportToExcel", "Activities", null, new { @class = "btn btn-success" })
+                @Html.ActionLink("Export to Pdf", "ExportToPdf", "Activities", null, new { @class = "btn btn-danger" })
             </div>
         </div>
     </div>
@@ -106,6 +108,34 @@
             $('#EndDate').datetimepicker({
                 format: 'DD.MM.YYYY HH:mm'
             });
+            var type = "@ViewBag.type";
+            if (type) {
+                $("#Type").val(type);
+            }
+            $("#ResetButton").click(function () {
+                $("#FilterForm :input").removeAttr('value');
+                $("#Type").val("all");
+                $("#FilterButton").trigger("click");
+            });
+
+
+            if ("@ViewBag.email" != "") {
+                var lastValue = "";
+                var elements = $(".table tr");
+                var i;
+                for (i = 1; i < elements.length; i++) {
+                    var currentValue = $(elements[i]).children()[2].innerText;
+                    if (currentValue === lastValue && currentValue === "in") {
+                        console.log(lastValue);
+                        $(elements[i]).css("background-color", "#ffcccc");
+                    }
+                    if (currentValue === lastValue && currentValue === "out") {
+                        console.log(currentValue);
+                        $(elements[i-1]).css("background-color", "#ffcccc");
+                    }
+                    lastValue = currentValue;
+                }
+            }
         });
     </script>
 }

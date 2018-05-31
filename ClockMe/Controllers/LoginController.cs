@@ -18,6 +18,10 @@ namespace ClockMe.Controllers
         // GET: Login
         public ActionResult Index()
         {
+            if (Session["UserId"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -33,6 +37,7 @@ namespace ClockMe.Controllers
                 {
                     Session["UserId"] = u.Id;
                     Session["Role"] = u.Role;
+                    Session["UserEmail"] = u.Email;
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("Password", "Password incorrect!");

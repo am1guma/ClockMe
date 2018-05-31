@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using ClockMe.Models;
+using ClockMe.App_Start;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using iTextSharp.text.html.simpleparser;
 
 namespace ClockMe.Controllers
 {
@@ -24,6 +32,8 @@ namespace ClockMe.Controllers
             }
             if (email != null && startDate != null && endDate != null && type != null)
             {
+                ViewBag.email = email;
+                ViewBag.type = type;
                 if (type == "all")
                     type = "";
                 var sd = new DateTime(1000, 1, 1);
@@ -39,7 +49,13 @@ namespace ClockMe.Controllers
                 var userId = Convert.ToInt32(Session["UserId"]);
                 activities = activities.Where(s => s.UserId == userId);
             }
-            return View(activities.ToList());
+            Global.CurrentActivities = activities.Select(item => new
+            {
+                item.User.Email,
+                item.Time,
+                item.Type
+            }).OrderByDescending(s => s.Time).ToList();
+            return View(activities.OrderByDescending(s => s.Time).ToList());
         }
 
         // GET: Activities/Details/5
@@ -70,7 +86,7 @@ namespace ClockMe.Controllers
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")
             {
                 var id = Convert.ToInt32(Session["UserId"]);
-                return View(new Activity { UserId = id, Time = DateTime.Now});
+                return View(new Activity { UserId = id });
             }
             return View();
         }
@@ -84,6 +100,17 @@ namespace ClockMe.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(activity.Type == "out")
+                {
+                    Activity lastActivity = db.Activities.Where(s => s.UserId == activity.UserId).OrderByDescending(s => s.Time).First();
+                    if(lastActivity.Type == "in")
+                    {
+                        double hours = (activity.Time - lastActivity.Time).TotalHours;
+                        var timesheet = new Timesheet { UserId = activity.UserId, Date = DateTime.Now, Hours = (int)hours, Type = "workingday" };
+                        db.Timesheets.Add(timesheet);
+                        //db.SaveChanges();
+                    }
+                }
                 db.Activities.Add(activity);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -162,6 +189,51 @@ namespace ClockMe.Controllers
             db.Activities.Remove(activity);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportToExcel()
+        {
+            var gv = new GridView
+            {
+                DataSource = Global.CurrentActivities
+            };
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            var currentDate = DateTime.Now;
+            Response.AddHeader("content-disposition", "attachment; filename=Activities_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+        
+        public FileResult ExportToPdf()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                var gv = new GridView
+                {
+                    DataSource = Global.CurrentActivities
+                };
+                gv.DataBind();
+                var currentDate = DateTime.Now;
+                StringWriter objStringWriter = new StringWriter();
+                HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+                gv.RenderControl(objHtmlTextWriter);
+                StringReader sr = new StringReader(objStringWriter.ToString());
+                Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                pdfDoc.Close();
+                return File(stream.ToArray(), "application/pdf", "Activities_" + currentDate.Hour + "_" + currentDate.Minute + "_" + currentDate.Second + ".pdf");
+            }
         }
 
         protected override void Dispose(bool disposing)
