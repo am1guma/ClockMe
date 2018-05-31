@@ -108,7 +108,6 @@ namespace ClockMe.Controllers
                         double hours = (activity.Time - lastActivity.Time).TotalHours;
                         var timesheet = new Timesheet { UserId = activity.UserId, Date = DateTime.Now, Hours = (int)hours, Type = "workingday" };
                         db.Timesheets.Add(timesheet);
-                        //db.SaveChanges();
                     }
                 }
                 db.Activities.Add(activity);

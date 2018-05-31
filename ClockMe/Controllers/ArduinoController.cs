@@ -102,14 +102,24 @@ namespace ClockMe.Controllers
 
         private string RegisterActivity(string id, string type)
         {
-            var inActivity = new Activity
+            var activity = new Activity
             {
                 UserId = Convert.ToInt32(id),
                 Time = DateTime.Now,
                 Type = type
             };
-            db.Activities.Add(inActivity);
-            db.SaveChanges(); if (Global.QrBytes.Count == 0) ;
+            if (activity.Type == "out")
+            {
+                Activity lastActivity = db.Activities.Where(s => s.UserId == activity.UserId).OrderByDescending(s => s.Time).First();
+                if (lastActivity.Type == "in")
+                {
+                    double hours = (activity.Time - lastActivity.Time).TotalHours;
+                    var timesheet = new Timesheet { UserId = activity.UserId, Date = DateTime.Now, Hours = (int)hours, Type = "workingday" };
+                    db.Timesheets.Add(timesheet);
+                }
+            }
+            db.Activities.Add(activity);
+            db.SaveChanges();
             return db.Users.Find(Convert.ToInt32(id))?.FirstName;
         }
 
