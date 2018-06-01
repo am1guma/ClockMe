@@ -156,8 +156,12 @@
                 });
             }
 
-            $('#StartDate').datetimepicker();
-            $('#EndDate').datetimepicker();
+            $('#StartDate').datetimepicker({
+                format: 'MM/DD/YYYY HH:mm'
+            });
+            $('#EndDate').datetimepicker({
+                format: 'MM/DD/YYYY HH:mm'
+            });
 
             var currentYear = new Date().getFullYear();
             var currentMonth = new Date().getMonth();

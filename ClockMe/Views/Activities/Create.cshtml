@@ -74,7 +74,9 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            $('#datepicker').datetimepicker();
+            $('#datepicker').datetimepicker({
+                format: 'MM/DD/YYYY HH:mm'
+            });
             $('#datepicker').data("DateTimePicker").defaultDate(new Date());
         });
     </script>

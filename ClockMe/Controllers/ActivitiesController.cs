@@ -40,9 +40,9 @@ namespace ClockMe.Controllers
                 var sd = new DateTime(1000, 1, 1);
                 var ed = new DateTime(3000, 1, 1);
                 if(startDate != "")
-                    sd = DateTime.ParseExact(startDate, "MM/dd/yyyy HH:mm", null);
+                    sd = DateTime.ParseExact(startDate, "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture);
                 if (endDate != "")
-                    ed = DateTime.ParseExact(endDate, "MM/dd/yyyy HH:mm", null);
+                    ed = DateTime.ParseExact(endDate, "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture);
                 activities = activities.Where(s => s.User.Email.Contains(email) && s.Time >= sd && s.Time <= ed && s.Type.Contains(type));
             }
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")
