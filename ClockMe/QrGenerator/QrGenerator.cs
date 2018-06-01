@@ -20,7 +20,7 @@ namespace ClockMe.QrGenerator
 
             Global.QrBytes = new List<string>();
 
-            using (var q = qrWriter.Write("192.168.0.178:81/Users/Create?pin=" + pin))
+            using (var q = qrWriter.Write("192.168.43.251:81/Users/Create?pin=" + pin))
             {
                 using (var ms = new MemoryStream())
                 {

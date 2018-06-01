@@ -34,15 +34,23 @@ namespace ClockMe.Controllers
             if (email != null && startDate != null && endDate != null && type != null)
             {
                 ViewBag.email = email;
+                ViewBag.sd = "";
+                ViewBag.ed = "";
                 ViewBag.type = type;
                 if (type == "all")
                     type = "";
                 var sd = new DateTime(1000, 1, 1);
                 var ed = new DateTime(3000, 1, 1);
                 if(startDate != "")
+                {
                     sd = DateTime.ParseExact(startDate, "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture);
+                    ViewBag.sd = startDate;
+                }
                 if (endDate != "")
+                {
                     ed = DateTime.ParseExact(endDate, "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture);
+                    ViewBag.ed = endDate;
+                }
                 activities = activities.Where(s => s.User.Email.Contains(email) && s.Time >= sd && s.Time <= ed && s.Type.Contains(type));
             }
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")

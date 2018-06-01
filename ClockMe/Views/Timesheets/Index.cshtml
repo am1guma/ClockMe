@@ -28,9 +28,9 @@
             <label class="control-label col-md-2">Date</label>
             <div class="col-md-10">
                 <div class='input-group date' style="max-width: 598px;">
-                    <input type="text" class="form-control" id="StartDate" name="StartDate">
+                    <input type="text" class="form-control" id="StartDate" name="StartDate" value="@ViewBag.sd">
                     <span class="input-group-addon">to</span>
-                    <input type="text" class="form-control" id="EndDate" name="EndDate">
+                    <input type="text" class="form-control" id="EndDate" name="EndDate" value="@ViewBag.ed">
                 </div>
             </div>
         </div>
@@ -128,6 +128,8 @@
             }
             $("#ResetButton").click(function () {
                 $("#FilterForm :input").removeAttr('value');
+                $("#StartDate").val('');
+                $("#EndDate").val('');
                 $("#Type").val("all");
                 $("#FilterButton").trigger("click");
             });

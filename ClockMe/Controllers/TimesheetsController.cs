@@ -33,6 +33,8 @@ namespace ClockMe.Controllers
             if (email != null && startDate != null && endDate != null && hours != null && type != null)
             {
                 ViewBag.email = email;
+                ViewBag.sd = "";
+                ViewBag.ed = "";
                 ViewBag.hours = hours;
                 ViewBag.type = type;
                 if (type == "all")
@@ -40,9 +42,15 @@ namespace ClockMe.Controllers
                 var sd = new DateTime(1000, 1, 1);
                 var ed = new DateTime(3000, 1, 1);
                 if (startDate != "")
+                {
                     sd = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
+                    ViewBag.sd = startDate;
+                }
                 if (endDate != "")
+                {
                     ed = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
+                    ViewBag.ed = endDate;
+                }
                 timesheets = timesheets.Where(s => s.User.Email.Contains(email) && s.Date >= sd && s.Date <= ed && s.Hours.ToString().Contains(hours) && s.Type.Contains(type));
             }
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")
