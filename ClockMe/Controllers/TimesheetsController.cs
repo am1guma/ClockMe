@@ -40,9 +40,9 @@ namespace ClockMe.Controllers
                 var sd = new DateTime(1000, 1, 1);
                 var ed = new DateTime(3000, 1, 1);
                 if (startDate != "")
-                    sd = DateTime.ParseExact(startDate, "dd.MM.yyyy", null);
+                    sd = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
                 if (endDate != "")
-                    ed = DateTime.ParseExact(endDate, "dd.MM.yyyy", null);
+                    ed = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
                 timesheets = timesheets.Where(s => s.User.Email.Contains(email) && s.Date >= sd && s.Date <= ed && s.Hours.ToString().Contains(hours) && s.Type.Contains(type));
             }
             if (Session["Role"] != null && Session["Role"].ToString() != "admin")

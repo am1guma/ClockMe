@@ -116,12 +116,8 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            $('#StartDate').datetimepicker({
-                format: 'DD.MM.YYYY'
-            });
-            $('#EndDate').datetimepicker({
-                format: 'DD.MM.YYYY'
-            });
+            $('#StartDate').datetimepicker();
+            $('#EndDate').datetimepicker();
             var type = "@ViewBag.type";
             if (type) {
                 $("#Type").val(type);

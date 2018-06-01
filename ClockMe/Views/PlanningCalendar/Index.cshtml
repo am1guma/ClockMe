@@ -21,6 +21,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" name="event-index" value="">
+                <input type="hidden" name="event-userId" value="">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label for="min-date" class="col-sm-3 control-label">Name</label>
@@ -60,6 +61,7 @@
     <script type="text/javascript">
         function editEvent(event) {
             $('#event-modal input[name="event-index"]').val(event ? event.id : '');
+            $('#event-modal input[name="event-userId"]').val(event ? event.userId : '');
             $('#event-modal input[name="event-name"]').val(event ? event.name : '');
             $('#event-modal input[name="event-location"]').val(event ? event.location : '');
             $("#StartDate").data("DateTimePicker").date(event ? event.startDate : '');
@@ -89,6 +91,7 @@
         function saveEvent() {
             var event = {
                 id: $('#event-modal input[name="event-index"]').val(),
+                userId: $('#event-modal input[name="event-userId"]').val(),
                 name: $('#event-modal input[name="event-name"]').val(),
                 location: $('#event-modal input[name="event-location"]').val(),
                 startDate: $("#StartDate").data("DateTimePicker").date()._d,
@@ -153,12 +156,8 @@
                 });
             }
 
-            $('#StartDate').datetimepicker({
-                            format: 'DD.MM.YYYY HH:mm'
-            });
-            $('#EndDate').datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm'
-            });
+            $('#StartDate').datetimepicker();
+            $('#EndDate').datetimepicker();
 
             var currentYear = new Date().getFullYear();
             var currentMonth = new Date().getMonth();

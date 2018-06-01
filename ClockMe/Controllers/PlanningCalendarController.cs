@@ -21,6 +21,7 @@ namespace ClockMe.Controllers
             ViewBag.events = events.Select(item => new
             {
                 item.Id,
+                item.UserId,
                 item.Name,
                 item.Location,
                 item.StartDate,
@@ -48,7 +49,7 @@ namespace ClockMe.Controllers
 
         public ActionResult Delete(PlanningCalendar cEvent)
         {
-            var calendarEvent = db.PlanningCalendars.Find(cEvent.Id);
+            var calendarEvent = db.PlanningCalendars.FirstOrDefault(s => s.UserId == cEvent.UserId && s.Id == cEvent.Id);
             if (calendarEvent != null)
             {
                 db.PlanningCalendars.Remove(calendarEvent);
