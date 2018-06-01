@@ -15,6 +15,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using iTextSharp.text.html.simpleparser;
+using System.Globalization;
 
 namespace ClockMe.Controllers
 {
@@ -149,6 +150,8 @@ namespace ClockMe.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,Time,Type")] Activity activity)
         {
+            activity.Time = DateTime.ParseExact(activity.Time.ToString("MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture), "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture);
+            UpdateModel(activity);
             if (ModelState.IsValid)
             {
                 db.Entry(activity).State = EntityState.Modified;
