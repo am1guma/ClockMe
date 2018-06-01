@@ -127,9 +127,10 @@
                 $("#Type").val(type);
             }
             $("#ResetButton").click(function () {
-                $("#FilterForm :input").removeAttr('value');
+                $("#Email").val('');
                 $("#StartDate").val('');
                 $("#EndDate").val('');
+                $("#Hours").val('');
                 $("#Type").val("all");
                 $("#FilterButton").trigger("click");
             });

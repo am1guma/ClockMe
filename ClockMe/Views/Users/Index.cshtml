@@ -119,8 +119,11 @@
                     $("#Role").val(role);
                 }
                 $("#ResetButton").click(function () {
-                    $("#FilterForm :input").removeAttr('value');
+                    $("#FirstName").val("");
+                    $("#LastName").val("");
+                    $("#Email").val("");
                     $("#Role").val("all");
+                    $("#WorkingHours").val("");
                     $("#FilterButton").trigger("click");
                 });
             });
