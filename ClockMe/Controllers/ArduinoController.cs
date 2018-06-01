@@ -59,7 +59,7 @@ namespace ClockMe.Controllers
             if (id == "1" || Global.LastMinute != time.Minute)
             {
                 Global.LastMinute = time.Minute;
-                return time.Day + "." + time.Month + "." + time.Year + ", " + time.Hour + ":" + minute;
+                return time.Month + "/" + time.Day + "/" + time.Year + ", " + time.Hour + ":" + minute;
             }
             return "0";
         }
