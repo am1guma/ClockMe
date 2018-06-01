@@ -13,7 +13,7 @@ namespace ClockMe.App_Start
         public static IEnumerable<dynamic> CurrentActivities { get; set; }
         public static IEnumerable<dynamic> CurrentTimesheets { get; set; }
         public static IEnumerable<dynamic> CurrentUsers { get; set; }
-        public static int Total { get; set; }
+        public static double Total { get; set; }
 
         private static MD5 md5Hash;
 

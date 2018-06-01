@@ -57,7 +57,7 @@ namespace ClockMe.Controllers
                 item.Hours,
                 item.Type
             }).OrderByDescending(s => s.Date).ToList();
-            Global.Total = timesheets.Select(s => s.Hours).DefaultIfEmpty().Sum();
+            Global.Total = Math.Round(timesheets.Select(s => s.Hours).DefaultIfEmpty().Sum(), 2);
             return View(timesheets.OrderByDescending(s => s.Date).ToList());
         }
 

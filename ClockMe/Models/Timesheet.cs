@@ -19,7 +19,8 @@ namespace ClockMe.Models
         public int UserId { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public System.DateTime Date { get; set; }
-        public int Hours { get; set; }
+        [Range(0.0001, 24)]
+        public double Hours { get; set; }
         public string Type { get; set; }
     
         public virtual User User { get; set; }

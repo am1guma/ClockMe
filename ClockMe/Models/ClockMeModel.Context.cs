@@ -26,9 +26,9 @@ namespace ClockMe.Models
         }
     
         public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<PinManager> PinManagers { get; set; }
         public virtual DbSet<PlanningCalendar> PlanningCalendars { get; set; }
         public virtual DbSet<Timesheet> Timesheets { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<PinManager> PinManagers { get; set; }
     }
 }

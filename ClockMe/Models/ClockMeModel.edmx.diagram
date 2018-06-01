@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="8d9a6650127a454d862505d3a3401f53" Name="Diagram1">
-        <EntityTypeShape EntityType="ClockMeModel.Activity" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClockMeModel.PlanningCalendar" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClockMeModel.Timesheet" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClockMeModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="ClockMeModel.FK_Activities_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="ClockMeModel.FK_PlanningCalendar_PlanningCalendar" ManuallyRouted="false" />
-        <AssociationConnector Association="ClockMeModel.FK_Timesheets_Users" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ClockMeModel.PinManager" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ClockMeModel.Activity" Width="1.5" PointX="3" PointY="7.25" />
+        <EntityTypeShape EntityType="ClockMeModel.PinManager" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ClockMeModel.PlanningCalendar" Width="1.5" PointX="3" PointY="1.25" />
+        <EntityTypeShape EntityType="ClockMeModel.Timesheet" Width="1.5" PointX="3" PointY="4.375" />
+        <EntityTypeShape EntityType="ClockMeModel.User" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="ClockMeModel.FK_Activities_Users" />
+        <AssociationConnector Association="ClockMeModel.FK_PlanningCalendar_PlanningCalendar" />
+        <AssociationConnector Association="ClockMeModel.FK_Timesheets_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
