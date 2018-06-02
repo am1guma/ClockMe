@@ -14,36 +14,36 @@ namespace ClockMe.Controllers
         {
             var requestType = Request.QueryString["requestType"];
             var id = Request.QueryString["id"];
-            switch(requestType)
+            switch (requestType)
             {
                 case "0":
-                {
-                    return GetTime(id);
-                }
+                    {
+                        return GetTime(id);
+                    }
                 case "1":
-                {
-                    return CheckForToBeDeleted();
-                }
+                    {
+                        return CheckForToBeDeleted();
+                    }
                 case "2":
-                {
-                    return RegisterUser(id);
-                }
+                    {
+                        return RegisterUser(id);
+                    }
                 case "3":
-                {
-                    return GetNextId();
-                }
+                    {
+                        return GetNextId();
+                    }
                 case "4":
-                {
-                    return RegisterActivity(id, "in");
-                }
+                    {
+                        return RegisterActivity(id, "in");
+                    }
                 case "5":
-                {
-                    return RegisterActivity(id, "out");
-                }
+                    {
+                        return RegisterActivity(id, "out");
+                    }
                 case "6":
-                {
-                    return GetQrBytes(id);
-                }
+                    {
+                        return GetQrBytes(id);
+                    }
             }
             return "0";
         }
@@ -96,7 +96,6 @@ namespace ClockMe.Controllers
             {
                 targetId += 1;
             }
-
             return targetId.ToString();
         }
 
@@ -130,9 +129,8 @@ namespace ClockMe.Controllers
             var pinManager = db.PinManagers.Find(Convert.ToInt32(id));
             if (Global.QrBytes == null)
             {
-                QrGenerator.QrGenerator.GenerateQrCode(pinManager.Pin.ToString());
+                Global.GenerateQrCode(pinManager.Pin.ToString());
             }
-
             var qrCode = Global.QrBytes.ElementAt(0);
             Global.QrBytes.RemoveAt(0);
             return qrCode;
