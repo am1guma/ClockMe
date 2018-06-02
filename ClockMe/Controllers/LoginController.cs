@@ -46,6 +46,7 @@ namespace ClockMe.Controllers
             {
                 ModelState.AddModelError("Email", "Email does not exist!");
             }
+            user.Password = "";
             return View(user);
         }
 
