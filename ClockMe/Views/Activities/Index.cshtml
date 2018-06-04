@@ -120,13 +120,18 @@
                 $("#FilterButton").trigger("click");
             });
 
+            var role = "@Session["Role"].ToString()";
 
-            if ("@ViewBag.email" != "") {
+            if ("@ViewBag.email" != "" || role != "admin") {
                 var lastValue = "";
                 var elements = $(".table tr");
                 var i;
+                var index = 2;
+                if (role != "admin") {
+                    index = 1;
+                }
                 for (i = 1; i < elements.length; i++) {
-                    var currentValue = $(elements[i]).children()[2].innerText;
+                    var currentValue = $(elements[i]).children()[index].innerText;
                     if (currentValue === lastValue && currentValue === "in") {
                         console.log(lastValue);
                         $(elements[i]).css("background-color", "#ffcccc");
